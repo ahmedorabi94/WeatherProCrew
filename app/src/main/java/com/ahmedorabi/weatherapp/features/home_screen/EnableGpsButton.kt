@@ -1,23 +1,24 @@
 package com.ahmedorabi.weatherapp.features.home_screen
 
 
-
 import android.app.Activity
 import android.content.Context
 import android.content.IntentSender
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import com.google.android.gms.common.api.ResolvableApiException
-import com.google.android.gms.location.*
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.LocationSettingsRequest
+import com.google.android.gms.location.Priority
 
 @Composable
-fun EnableGpsButton(activity: Activity) {
-
-    // Create Location Settings Request
+fun EnableGpsButton(
+    context: Context,
+    checkLocationPermission: () -> Unit
+) {
     val locationRequest = LocationRequest.Builder(
         Priority.PRIORITY_HIGH_ACCURACY,
         1000L // 1-second interval (can be adjusted)
@@ -32,15 +33,17 @@ fun EnableGpsButton(activity: Activity) {
     val locationRequestLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartIntentSenderForResult()
     ) { result ->
-      //  gpsEnabled = result.resultCode == Activity.RESULT_OK
+        //  gpsEnabled = result.resultCode == Activity.RESULT_OK
+        if (result.resultCode == Activity.RESULT_OK){
+            checkLocationPermission.invoke()
+        }
     }
 
-    val client = LocationServices.getSettingsClient(activity)
+    val client = LocationServices.getSettingsClient(context)
     val task = client.checkLocationSettings(locationSettingsRequest)
 
     task.addOnSuccessListener {
-        // GPS is already enabled
-       // gpsEnabled = true
+
     }
 
     task.addOnFailureListener { exception ->
@@ -53,10 +56,4 @@ fun EnableGpsButton(activity: Activity) {
             }
         }
     }
-
-//    Button(onClick = {
-//
-//    }) {
-//        Text(text = if (gpsEnabled) "GPS Enabled" else "Enable GPS")
-//    }
 }

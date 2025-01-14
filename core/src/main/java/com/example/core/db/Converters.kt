@@ -22,8 +22,6 @@ class Converters {
 
 
 
-
-    //
     @TypeConverter
     fun fromForecastItemList(value: List<ForecastItem>?): String {
         val gson = Gson()
@@ -36,7 +34,6 @@ class Converters {
         return Gson().fromJson(value, listType)
     }
 
-    //
     @TypeConverter
     fun fromWeatherForecastList(value: List<com.example.core.domain.forecast.Weather>?): String {
         val gson = Gson()

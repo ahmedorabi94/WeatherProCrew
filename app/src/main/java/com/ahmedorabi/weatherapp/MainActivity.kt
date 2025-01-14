@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
-import com.ahmedorabi.weatherapp.features.home_screen.EnableGpsButton
 import com.ahmedorabi.weatherapp.ui.theme.WeatherAppTheme
 import com.ahmedorabi.weatherapp.utils.AppNavHost
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,7 +22,6 @@ class MainActivity : ComponentActivity() {
         setContent {
             WeatherAppTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    EnableGpsButton(this)
                     AppNavHost(
                         modifier = Modifier.padding(innerPadding),
                         navController = rememberNavController()

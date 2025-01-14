@@ -65,22 +65,4 @@ class WeatherDetailsViewModel @Inject constructor(
             }
         }
     }
-
-//    fun addHistoricalModel(temp: Int, name: String, desc: String) {
-//
-//        // dd-MM-yyyy
-//        val df = SimpleDateFormat("dd.MM.yyyy - hh:mm", Locale.US)
-//        val time: String = df.format(Date())
-//
-//        val historicalModel = HistoricalModel(
-//            name = name,
-//            desc = desc,
-//            temp = temp,
-//            dateTime = time
-//        )
-//
-//        viewModelScope.launch {
-//            addHistoricalModelUseCase.invoke(historicalModel)
-//        }
-//    }
 }

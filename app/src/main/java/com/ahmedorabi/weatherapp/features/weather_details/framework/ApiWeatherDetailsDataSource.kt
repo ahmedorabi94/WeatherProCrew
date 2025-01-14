@@ -82,8 +82,6 @@ class ApiWeatherDetailsDataSource @Inject constructor(
 
             when (response) {
                 is ResultWrapper.Success -> {
-                   // emit(Resource.success(response.value))
-
                     try {
                         weatherDao.deleteForecast(name.replaceFirstChar { it.uppercase() })
                         weatherDao.insertForecast(response.value)
