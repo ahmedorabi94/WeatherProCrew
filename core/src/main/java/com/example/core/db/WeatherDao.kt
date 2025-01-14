@@ -1,5 +1,6 @@
 package com.example.core.db
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -22,6 +23,9 @@ interface WeatherDao {
 
 
 
+    @Query("Select * from weather")
+    fun getAllWeathers(): LiveData<List<WeatherResponse>>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertForecast(forecast: ForecastResponse)
 
@@ -31,4 +35,7 @@ interface WeatherDao {
 
     @Query("SELECT * FROM forecast WHERE name = :city ")
     suspend fun getForecastWeatherByCity(city: String): ForecastResponse?
+
+    @Query("Select * from forecast")
+    fun getAllForecasts(): LiveData<List<ForecastResponse>>
 }

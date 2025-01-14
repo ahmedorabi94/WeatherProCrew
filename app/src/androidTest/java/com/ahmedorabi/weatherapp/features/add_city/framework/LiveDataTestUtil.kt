@@ -1,4 +1,4 @@
-package com.ahmedorabi.weatherapp
+package com.ahmedorabi.weatherapp.features.add_city.framework
 
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
