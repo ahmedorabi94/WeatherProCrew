@@ -2,7 +2,6 @@ package com.ahmedorabi.weatherapp.features.home_screen
 
 
 import android.app.Activity
-import android.content.Context
 import android.content.IntentSender
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.IntentSenderRequest
@@ -16,7 +15,7 @@ import com.google.android.gms.location.Priority
 
 @Composable
 fun EnableGpsButton(
-    context: Context,
+    context: Activity,
     checkLocationPermission: () -> Unit
 ) {
     val locationRequest = LocationRequest.Builder(

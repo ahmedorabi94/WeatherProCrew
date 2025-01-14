@@ -2,6 +2,8 @@ package com.ahmedorabi.weatherapp.features.add_city.ui
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.pm.PackageManager
 import android.location.Geocoder
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -32,13 +34,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.ahmedorabi.weatherapp.R
-import com.ahmedorabi.weatherapp.features.home_screen.EnableGpsButton
+import androidx.core.content.ContextCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import timber.log.Timber
@@ -61,8 +61,7 @@ fun AddCityCard(
 
     val checkPermission = remember { mutableStateOf(false) }
 
-    if (checkPermission.value) {
-        // Permission request launcher
+    if (checkPermission.value || isLocationPermissionGranted(context)) {
         val locationPermissionLauncher = rememberLauncherForActivityResult(
             contract = ActivityResultContracts.RequestPermission()
         ) { isGranted ->
@@ -81,12 +80,9 @@ fun AddCityCard(
                             "Enter City name"
                         }
                         searchCity.invoke(cityName.value)
-                        //  locationText = "Lat: ${it.latitude}, Lng: ${it.longitude}"
                         Timber.e("cityName " + cityName.value)
-                         checkPermission.value = false
+                        checkPermission.value = false
                     } ?: run {
-                        // locationText = "Location not available"
-
                         cityName.value = "Enter City name"
                         Timber.e("cityName " + cityName.value)
                         checkPermission.value = false
@@ -96,7 +92,6 @@ fun AddCityCard(
             } else {
                 cityName.value = "Enter City name"
                 Timber.e("locationText " + cityName.value)
-              //  checkPermission.value = false
             }
         }
 
@@ -105,11 +100,6 @@ fun AddCityCard(
         }
 
     }
-
-    EnableGpsButton(context) {
-        checkPermission.value = true
-    }
-
 
 
     Column(
@@ -147,7 +137,6 @@ fun AddCityCard(
                 .padding(horizontal = 30.dp, vertical = 4.dp),
             placeholder = { Text(text = "Add City") },
             textStyle = TextStyle(
-                color = colorResource(id = R.color.black),
                 fontSize = 17.sp,
                 fontFamily = FontFamily.SansSerif
             )
@@ -172,4 +161,11 @@ fun AddCityCard(
             )
         }
     }
+}
+
+fun isLocationPermissionGranted(context: Context): Boolean {
+    return ContextCompat.checkSelfPermission(
+        context,
+        Manifest.permission.ACCESS_FINE_LOCATION
+    ) == PackageManager.PERMISSION_GRANTED
 }
