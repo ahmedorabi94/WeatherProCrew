@@ -43,7 +43,7 @@ class WeatherDetailsViewModel @Inject constructor(
 
     }
 
-    private fun getForecastResponseFlow(name: String) {
+     fun getForecastResponseFlow(name: String) {
         viewModelScope.launch {
             getWeatherForecastUseCase.invoke(name)
                 .collect { response ->

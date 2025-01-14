@@ -5,11 +5,13 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import com.ahmedorabi.weatherapp.TestCoroutineRule
 import com.example.core.api.Resource
+import com.example.core.domain.forecast.ForecastResponse
 import com.example.core.domain.model.WeatherResponse
 import com.example.core.domain.usecases.GetWeatherDetailsUseCase
 import com.example.core.domain.usecases.GetWeatherForecastUseCase
 import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import org.junit.Before
 import org.junit.Rule
@@ -20,7 +22,6 @@ import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.Mockito.mock
 import org.mockito.junit.MockitoJUnitRunner
-import java.util.*
 
 
 @ExperimentalCoroutinesApi
@@ -47,16 +48,14 @@ class WeatherDetailsViewModelTest {
     @Mock
     private lateinit var getWeatherForecastUseCase: GetWeatherForecastUseCase
 
-//    @Mock
-//    private lateinit var addHistoricalModelUseCase: AddHistoricalModelUseCase
 
     @Before
     fun setup() {
-        viewModel = WeatherDetailsViewModel(useCase,getWeatherForecastUseCase)
+        viewModel = WeatherDetailsViewModel(useCase, getWeatherForecastUseCase)
     }
 
     @Test
-    fun shouldGetCitiesListSuccessResponse() {
+    fun shouldGetWeatherDetailsSuccessResponse() {
 
         val weatherResponse = mock(WeatherResponse::class.java)
 
@@ -90,20 +89,35 @@ class WeatherDetailsViewModelTest {
 
     }
 
-//    @Test
-//    fun test_addHistoricalModel() {
-//
-//        testCoroutineRule.runBlockingTest {
-//            val df = SimpleDateFormat("dd.MM.yyyy - hh:mm", Locale.US)
-//            val time: String = df.format(Date())
-//
-//            val historicalModel = HistoricalModel(name = "london", dateTime = time, temp = 12, desc = "test1")
-//
-//            viewModel.addHistoricalModel(12,"london","test1")
-//
-//            Mockito.verify(addHistoricalModelUseCase).invoke(historicalModel)
-//
-//        }
-//    }
+
+    @Test
+    fun shouldGetForeCastSuccessResponse() {
+
+        val forecastResponse = mock(ForecastResponse::class.java)
+
+        val result1 = Resource.success(forecastResponse)
+
+
+        val flow = flow {
+            emit(result1)
+        }
+        testCoroutineRule.runBlockingTest {
+
+            Mockito.doReturn(flow)
+                .`when`(getWeatherForecastUseCase)
+                .invoke("london")
+
+            viewModel.getForecastResponseFlow("london")
+
+            Mockito.verify(getWeatherForecastUseCase).invoke("london")
+
+            val emittedValue = viewModel.forecastState.first()
+            assertEquals(forecastResponse, emittedValue)
+
+
+        }
+
+
+    }
 
 }
