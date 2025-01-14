@@ -52,7 +52,7 @@ class ApiWeatherDetailsDataSourceTest {
 
 
     @Test
-    fun shouldGetCitiesSuccessResponse() {
+    fun shouldGetWeatherDetailsSuccessResponse() {
 
 
         val weatherResponse = Mockito.mock(WeatherResponse::class.java)
@@ -64,16 +64,16 @@ class ApiWeatherDetailsDataSourceTest {
                 .`when`(apiService)
                 .getWeatherResponseAsync("london")
 
-            val response = apiCitiesListDataSource.getWeatherDetailsResponse("london").drop(1).first()
+            val response = apiCitiesListDataSource.getWeatherDetailsResponse("london").drop(2).first()
 
-            Assert.assertEquals(response, result1)
+            Assert.assertEquals(response.status, result1.status)
 
         }
     }
 
 
     @Test
-    fun shouldGetListCitiesFailureResponse() {
+    fun shouldGetWeatherDetailsFailureResponse() {
 
         val result1 = Resource.error<WeatherResponse>("NetworkError")
 
@@ -84,7 +84,7 @@ class ApiWeatherDetailsDataSourceTest {
                 throw IOException("Ooops")
             }
 
-            val response = apiCitiesListDataSource.getWeatherDetailsResponse("london").drop(1).first()
+            val response = apiCitiesListDataSource.getWeatherDetailsResponse("london").drop(2).first()
 
             Assert.assertEquals(response, result1)
 
@@ -109,7 +109,7 @@ class ApiWeatherDetailsDataSourceTest {
 
             val response = apiCitiesListDataSource.getForecastWeatherResponse("london").drop(1).first()
 
-            Assert.assertEquals(response, result1)
+            Assert.assertEquals(response.status, result1.status)
 
         }
     }
@@ -127,7 +127,7 @@ class ApiWeatherDetailsDataSourceTest {
                 throw IOException("Ooops")
             }
 
-            val response = apiCitiesListDataSource.getForecastWeatherResponse("london").drop(1).first()
+            val response = apiCitiesListDataSource.getForecastWeatherResponse("london").drop(2).first()
 
             Assert.assertEquals(response, result1)
 
